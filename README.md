@@ -1,2 +1,1 @@
-# tpi_gestock
- 
+# IT department stock management
