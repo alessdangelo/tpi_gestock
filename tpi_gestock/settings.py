@@ -33,20 +33,24 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',  # Core authentication framework and its default models.
-    'django.contrib.contenttypes',  # Django content type system (allows permissions to be associated with models).
+    # Core authentication framework and its default models.
+    'django.contrib.auth',
+    # Django content type system (allows permissions to be associated with models).
+    'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_gestock.apps.AppGestockConfig', #configuration of the app_gestock
-    'django.contrib.sessions', #session management
+    'app_gestock.apps.AppGestockConfig',  # configuration of the app_gestock
+    'django.contrib.sessions',  # session management
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
+    # Manages sessions across requests
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware', # Associates users with requests using sessions.
+    # Associates users with requests using sessions.
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -56,7 +60,8 @@ ROOT_URLCONF = 'tpi_gestock.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # Add the templates directory and subfolders to the TEMPLATES setting
+        # Add the templates directory and subfolders to the TEMPLATES setting
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,4 +131,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
-
