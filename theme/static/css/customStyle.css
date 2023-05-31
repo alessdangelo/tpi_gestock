@@ -1,0 +1,15 @@
+select{
+   padding: 5px 20px 5px 10px !important;
+   background-position: right !important;
+}
+.borrowed-bg{
+    background-color: rgb(252 165 165) !important;
+}
+
+.available-bg{
+    background-color: rgb(134 239 172)!important;
+}
+
+.user-bg{
+    background-color: rgb(147 197 253)!important;
+}

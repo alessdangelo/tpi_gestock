@@ -1,6 +1,58 @@
 {% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
-
+{% block title %}Vue d'ensemble{% endblock %}
 {% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
-	
+{%block emprunts%}{%endblock%}
+
+<h2 class="text-2xl font-semibold leading-tight pt-5 pb-5">Liste d'articles</h2>
+<table id="products-table" class="table-auto text-xs text-gray-700 text-left">
+    <thead>
+        <tr>
+            <th class="px-2 py-2">Type</th>
+            <th class="px-2 py-2">Categorie</th>
+            <th class="px-2 py-2">Product</th>
+            <th class="px-2 py-2">Article Name</th>
+            <th class="px-2 py-2">Emprunté par</th>
+            <th class="px-2 py-2">Description</th>
+            <th class="px-2 py-2">Lieu de location</th>
+            <th class="px-2 py-2">Date d'emprunt</th>
+            <th class="px-2 py-2">Date de retour</th>
+        </tr>
+    </thead>
+</table>
+
+<script type="text/javascript">
+    // Initialize the DataTables.net table
+    $(document).ready(function() {
+        $('#products-table').DataTable({
+            scrollX: true,
+            ajax: {
+                url: '{% url 'jsondata' %}?table=t_article',  // URL to fetch the data from the view
+                type: 'GET',
+                dataSrc: ''
+            },
+            columns: [
+            { data: 'fkProduct__fkType__typName' },
+            { data: 'fkProduct__fkCategory__catName' },
+            { data: 'fkProduct__proName' },
+            { data: 'artName' },
+            { data: 't_borrow__borUser__username' },
+            { data: 'artNote' },
+            { data: 't_borrow__borLocation' },
+            { data: 'borDate_str' },
+            { data: 'borReturnDate_str' },
+                // Add more columns as needed
+            ],
+            // Customize row rendering
+            "rowCallback": function(row, data) {
+                // Check if article is borrowed
+                if (data.borDate_str !== null && data.borReturnDate_str !== null) {
+                    $(row).addClass('borrowed-bg');  // Apply CSS class for borrowed rows
+                }else{
+                    $(row).addClass('available-bg');  // Apply CSS class for available rows
+                }
+            },
+        });
+    });
+</script>
 
 {% endblock content %}

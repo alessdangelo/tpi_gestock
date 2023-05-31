@@ -42,8 +42,17 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                'montserrat': ['Montserrat'],
+                'Inter': ['Inter'],
+                 sans: ['Inter var', 'Inter', 'sans-serif'],
+                'lato': ['Lato'],
+                'garamond': ['Garamond']
+            }
+        }
     },
+    variants: {},
     plugins: [
         /**
          * '@tailwindcss/forms' is the forms plugin that provides a minimal styling
