@@ -13,3 +13,14 @@ select{
 .user-bg{
     background-color: rgb(147 197 253)!important;
 }
+
+/* Add a pointer cursor and tooltip to clickable rows */
+tr.clickable-row:hover {
+    cursor: pointer;
+    
+}
+
+.dataTable {
+    width: 100% !important;
+    margin: 0 auto !important;
+  }

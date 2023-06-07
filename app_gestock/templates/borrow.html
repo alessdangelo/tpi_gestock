@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
+{% block title %}{{ borrow.artName }}{% endblock %}
+{% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
+{%block emprunts%}{%endblock%}
+<img width="200px" src="{{ borrow.fkArticle.fkProduct.proImage.url }}"></img>
+<p>Produit: {{ borrow.fkArticle.fkProduct.proName }}</p>
+<p>Label: {{ borrow.fkArticle }}</p>
+<p>Note: {{ borrow.borNote }}</p>
+<p>Location: {{ borrow.borLocation }}</p>
+<p>Emprunté par: {{ borrow.borUser }}</p>
+<a class="bg-slate-500 hover:bg-slate-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'editBorrow' %}?id={{ borrow.idBorrow }}">Modifier</a>
+<a class="bg-red-500 hover:bg-red-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'deleteBorrow' %}?id={{ borrow.idBorrow }}">Supprimer</a>
+{%endblock%}

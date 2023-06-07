@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
+{% block title %}Ajouter un produit{% endblock %}
+{% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
+{%block emprunts%}{%endblock%}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="bg-slate-500 hover:bg-slate-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" type="submit">Ajouter</button>
+  </form>
+{%endblock%}

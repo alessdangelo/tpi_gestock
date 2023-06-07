@@ -18,11 +18,13 @@ class t_article(models.Model):
     Table representing an article, which is a product.
     """
     idArticle = models.AutoField(primary_key=True) # Unique identifier for the article
-    artName = models.CharField(max_length=50) # Name of the article
+    artName = models.CharField(max_length=50, unique=True) # Name of the article
     artNote = models.CharField(max_length=250) # Note for the article
-    fkCupboard = models.ForeignKey('t_cupboard', on_delete=models.CASCADE) # Foreign key to the cupboard table
+    fkCupboard = models.ForeignKey('t_cupboard', on_delete=models.CASCADE, blank=True, null=True) # Foreign key to the cupboard table
     fkRoom = models.ForeignKey('t_room', on_delete=models.CASCADE) # Foreign key to the room table
     fkProduct = models.ForeignKey('t_products', on_delete=models.CASCADE) # Foreign key to the product table
+    def __str__(self):
+        return self.artName
 
 
 class t_categories(models.Model):
@@ -30,17 +32,21 @@ class t_categories(models.Model):
     Table representing a category.
     """
     idCategories = models.AutoField(primary_key=True) # Unique identifier for the category
-    catName = models.CharField(max_length=50) # Name of the category
+    catName = models.CharField(max_length=50, unique=True) # Name of the category
     # fkType = models.ForeignKey('t_types', on_delete=models.CASCADE) # Foreign key to the type table
-
+    def __str__(self):
+        return self.catName
 
 class t_cupboard(models.Model):
     """
     Table representing a cupboard.
     """
     idCupboard = models.AutoField(primary_key=True) # Unique identifier for the cupboard
-    cupName = models.CharField(max_length=50) # Name of the cupboard
+    cupName = models.CharField(max_length=50, unique=True) # Name of the cupboard
     fkRoom = models.ForeignKey('t_room', on_delete=models.CASCADE) # Foreign key to the room table
+    
+    def __str__(self):
+        return self.cupName
 
 
 class t_products(models.Model):
@@ -48,14 +54,17 @@ class t_products(models.Model):
     Table representing a product.
     """
     idProduct = models.AutoField(primary_key=True) # Unique identifier for the product
-    proName = models.CharField(max_length=75) # Name of the product
+    proName = models.CharField(max_length=75, unique=True) # Name of the product
     proNote = models.CharField(max_length=250) # Note for the product
-    proImage = models.CharField(max_length=500) # Image of the product
+    proImage = models.ImageField(upload_to="proImages", blank=True, null=True) # Image link of the product
     proBoughtPrice = models.FloatField() # Price at which the product was bought
     proBoughtDate = models.DateField() # Date on which the product was bought
-    fkArticle = models.ForeignKey(t_article, on_delete=models.CASCADE, null=True) # Foreign key to the article table
+    fkArticle = models.ForeignKey(t_article, on_delete=models.CASCADE, blank=True, null=True) # Foreign key to the article table
     fkCategory = models.ForeignKey(t_categories, on_delete=models.CASCADE) # Foreign key to the category table
     fkType = models.ForeignKey('t_types', on_delete=models.CASCADE) # Foreign key to the type table
+    
+    def __str__(self):
+        return self.proName # Return the name of the product instead of the object itself
 
 
 class t_room(models.Model):
@@ -63,7 +72,9 @@ class t_room(models.Model):
     Table representing a room.
     """
     idRoom = models.AutoField(primary_key=True) # Unique identifier for the room
-    rooName = models.CharField(max_length=50) # Name of the room
+    rooName = models.CharField(max_length=50, unique=True) # Name of the room
+    def __str__(self):
+        return self.rooName
 
 
 class t_types(models.Model):
@@ -71,4 +82,7 @@ class t_types(models.Model):
     Table representing a type.
     """
     idType = models.AutoField(primary_key=True) # Unique identifier for the type
-    typName = models.CharField(max_length=50) # Name of the type
+    typName = models.CharField(max_length=50, unique=True) # Name of the type
+    
+    def __str__(self):
+        return self.typName

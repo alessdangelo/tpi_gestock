@@ -17,19 +17,29 @@
     <link rel="icon" type="image/x-icon" href="{% static 'resources/favicon.svg' %}" />
 </head>
 <body class="h-full">
-    <div class="HEADER m-5 flex items-center justify-between flex-row">
+    <div class="HEADER mb-5 ml-5 mt-5 mr-1 flex items-center justify-between flex-row">
         <div class="flex flex-row items-center">
+            {% if user.is_authenticated %}
             <svg class="w-20 mr-2 bg-slate-700 rounded-lg" xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 28 28" className="w-6 h-6">
+                <a xlink:href="{% url 'logout' %}" >
                 <path fill="white" fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                </a>
             </svg>
+            {% else %}
+            <svg class="w-20 mr-2 bg-slate-700 rounded-lg" xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 28 28" className="w-6 h-6">
+                <a xlink:href="{% url 'login' %}" >
+                <path fill="white" fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                </a>
+            </svg>
+            {% endif %}
             {% if user.is_authenticated %}
             <div class="hidden sm:block">
                 <p class="text-xl font-medium">{{request.user.username}}</p>
-                <p class="text-sm">Emprunts en cours : X{%block emprunts%}{%endblock%}</p>
+                <p class="text-sm">Emprunts en cours : {{ borTotal }}</p>
                 <a class="bg-red-500 hover:bg-red-700 text-xs text-white font-medium py-2 px-2 rounded-lg" href="{% url 'logout' %}" href="{% url 'logout' %}">Déconnexion</a>
             </div>
             {% else %}
-            <a class="hidden sm:block" href="{% url 'login' %}">Connexion</a>
+            <a class="hidden sm:block bg-slate-500 hover:bg-slate-700 text-xs text-white font-medium py-2 px-2 rounded-lg" href="{% url 'login' %}">Connexion</a>
             {% endif %}
         </div>
         <div class="flex flex-col items-center">
@@ -38,7 +48,7 @@
         </div>
         <h1 class="text-4xl w-fit font-extrabold text-blue-800">ETML</h1>
     </div>
-    <div class="flex flex-col w-full md:flex-row">
+    <div class="flex flex-col w-fit md:flex-row">
         <div class="MENU ml-5 text-slate-800">
             <div class="mb-5">
                 <a href="{% url 'index' %}"><h2 class="text-xl font-bold">Vue d'Ensemble</h2></a>
@@ -52,14 +62,15 @@
             <div class="mb-5">
                 <h2 class="text-xl font-bold">Materiel</h2>
                 <div class="ml-2">
-                    <h3>Liste</h3>
+                    <a href="{% url 'products' %}"><h3>Liste de produits</h3></a>
+                    <a href="{% url 'articles' %}"><h3>Liste d'articles</h3></a>
 					{% for item in menuTypes %}
-						<a href="{% url 'login' %}"><h3>{{item}}</h3></a>
+						<h3>{{item}}</h3>
 					{% endfor %}
                 </div>
             </div>
         </div>
-        <div class="CONTENT md:ml-10 p-0 md:p-10 md:pt-5 w-auto overflow-auto bg-slate-200 rounded-lg">
+        <div class="CONTENT md:ml-10 p-0 md:p-10 md:pt-5 w-fit overflow-auto bg-slate-200 rounded-lg">
             {% comment %} Block will be replaced with content from other pages{% endcomment %}
 			{% block content %}
 			{% endblock %}

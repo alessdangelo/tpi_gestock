@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
+{% block title %}{{ product.proName }}{% endblock %}
+{% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
+<img src="{{ product.proImage.url }}" alt="{{ product.proName }}" width="200px">
+<p>Produit: {{ product.proName }}</p>
+<p>Description: {{ product.proNote }}</p>
+<p>Prix: {{ product.proBoughtPrice }}</p>
+<p>Date d'achat: {{ product.proBoughtDate }}</p>
+<p>Categorie: {{ product.fkCategory }}</p>
+<p>Type: {{ product.fkType }}</p>
+<a class="bg-slate-500 hover:bg-slate-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'editProduct' %}?id={{ product.idProduct }}">Modifier</a>
+<a class="bg-red-500 hover:bg-red-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'deleteProduct' %}?id={{ product.idProduct }}">Supprimer</a>
+{%endblock%}

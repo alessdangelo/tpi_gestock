@@ -60,6 +60,11 @@
             // Customize row rendering
             "rowCallback": function(row, data) {
                 // Check if article is borrowed
+                $(row).addClass('clickable-row');  // Apply CSS class for available rows
+                $(row).on('click', function() {
+                    // Redirect to the detail page for the selected article
+                    window.location.href = '/borrow?id=' + data.idBorrow;
+                });
                 if (data.borUser__username != '{{ request.user.username }}') {
                     $(row).hide();   // Apply CSS class for borrowed rows
                 }
@@ -88,6 +93,11 @@
             // Customize row rendering
             "rowCallback": function(row, data) {
                 // Check if article is borrowed
+                $(row).on('click', function() {
+                    $(row).addClass('clickable-row');  // Apply CSS class for available rows
+                    // Redirect to the detail page for the selected article
+                    window.location.href = '/borrow?id=' + data.idBorrow;
+                });
                 if (data.borUser__username == '{{ request.user.username }}') {
                     $(row).addClass('user-bg');   // Apply CSS class for borrowed rows
                 }

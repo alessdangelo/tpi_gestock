@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
+{% load qr_code %}
+{% block title %}{{ article.artName }}{% endblock %}
+{% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
+<div class="flex flex-col sm:flex-row items-center">
+    <div>
+        <img width="200px" src="{{ article.fkProduct.proImage.url }}" ></img>
+        <p>Produit: {{ article.fkProduct }}</p>
+        <p>Label: {{ article.artName }}</p>
+        <p>Note: {{ article.artNote }}</p>
+        <p>Labo: {{ article.fkRoom }}</p>
+        <p>Armoire: {{ article.fkCupboard }}</p>
+    </div>
+    <div>
+        {% qr_from_text qr_content size=8 version=20 error_correction="Q" %}
+    </div>
+</div>
+{% if not article.t_borrow_set.exists %}
+    <a class="bg-blue-500 hover:bg-blue-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'addBorrow' %}?id={{ article.idArticle }}">Emprunter</a>
+{% endif %}<a class="bg-slate-500 hover:bg-slate-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'editArticle' %}?id={{ article.idArticle }}">Modifier</a>
+<a class="bg-red-500 hover:bg-red-700 text-xs text-white font-medium py-2 px-2 rounded-lg m-5" href="{% url 'deleteArticle' %}?id={{ article.idArticle }}">Supprimer</a>
+{%endblock%}

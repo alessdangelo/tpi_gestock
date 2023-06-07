@@ -32,29 +32,30 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django default applications
     'django.contrib.admin',
-    # Core authentication framework and its default models.
     'django.contrib.auth',
-    # Django content type system (allows permissions to be associated with models).
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_gestock.apps.AppGestockConfig',  # configuration of the app_gestock
-    'django.contrib.sessions',  # session management
-    'tailwind', # tailwindcss integration
-    'theme', # name of the tailwind theme    
+    'django.contrib.sessions',
+    'app_gestock.apps.AppGestockConfig',
+    # tailwindcss integration
+    'tailwind',
+    # name of the tailwind theme 
+    'theme',
+    'qr_code'
 ]
 
+# Define the middleware for the Django app
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    # Manages sessions across requests
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    # Associates users with requests using sessions.
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',  # Adds various security enhancements to the middleware stack
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
+    'django.middleware.common.CommonMiddleware',  # Provides various common middleware functions
+    'django.middleware.csrf.CsrfViewMiddleware',  # Provides protection against Cross Site Request Forgeries (CSRF)
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions
+    'django.contrib.messages.middleware.MessageMiddleware',  # Enables messages framework
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Provides clickjacking protection
 ]
 
 ROOT_URLCONF = 'tpi_gestock.urls'
@@ -76,7 +77,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tpi_gestock.wsgi.application'
+WSGI_APPLICATION = 'tpi_gestock.wsgi.application' # tells the web server how to interface with the Django app and how to serve requests.
 
 
 # Database
@@ -118,7 +119,10 @@ TIME_ZONE = 'Europe/Zurich'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
+DATE_INPUT_FORMATS = ('%d/%m/%Y','%Y-%m-%d')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -137,3 +141,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

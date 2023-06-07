@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% comment %} Template of the main page, using the 'base.html' file {% endcomment %}
+{% block title %}Produits{% endblock %}
+{% block content %} {% comment %} Block that replace the same one from the base file {% endcomment %}
+{%block emprunts%}{%endblock%}
+
+<h2 class="text-2xl font-semibold leading-tight pt-5 pb-5">Produits</h2>
+<table id="products-table" class="table-auto compact text-xs text-gray-700 text-left">
+    <thead>
+        <tr>
+            <th class="px-2 py-2">Type</th>
+            <th class="px-2 py-2">Categorie</th>
+            <th class="px-2 py-2">Produit</th>
+            <th class="px-2 py-2">Description</th>
+        </tr>
+    </thead>
+</table>
+
+<script type="text/javascript">
+    // Initialize the DataTables.net table
+    $(document).ready(function() {
+        $('#products-table').DataTable({
+            scrollX: true,
+            ajax: {
+                url: '{% url 'jsondata' %}?table=t_products',  // URL to fetch the data from the view
+                type: 'GET',
+                dataSrc: ''
+            },
+            columns: [
+            { data: 'fkType__typName' },
+            { data: 'fkCategory__catName' },
+            { data: 'proName' },
+            { data: 'proNote' },
+            // Add more columns as needed
+            ],"rowCallback": function(row, data) {
+                $(row).addClass('clickable-row');  // Apply CSS class for available rows
+                $(row).on('click', function() {
+                    // Redirect to the detail page for the selected article
+                    window.location.href = '/product?id=' + data.idProduct;
+                });
+            },
+        });
+    });
+</script>
+
+{% endblock content %}
