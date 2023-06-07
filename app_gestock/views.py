@@ -11,13 +11,14 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from .forms import *
 
-# Views
+### Views ###
 
-
+# Index view - base view
 def index(request):
     menuTypes = dynMenu()
     return render(request, 'index.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
+# Product view - displays a single product
 @login_required
 def product(request):
     menuTypes = dynMenu()
@@ -25,6 +26,7 @@ def product(request):
     product = t_products.objects.get(idProduct=id)
     return render(request, 'product.html', context={'menuTypes': menuTypes, 'product': product, 'borTotal': getTotalUserBorrows(request)})
 
+# Article view - displays a single article
 @login_required
 def article(request):
     menuTypes = dynMenu()
@@ -33,6 +35,7 @@ def article(request):
     qr_content = f"ETML - Informatique - {article.artName} - {article.fkProduct.proName} - {article.artNote} - {article.fkRoom} / {article.fkCupboard}"
     return render(request, 'article.html', context={'menuTypes': menuTypes, 'article': article, 'borTotal': getTotalUserBorrows(request), 'qr_content': qr_content})
 
+# Borrow view - displays a single borrow
 @login_required
 def borrow(request):
     menuTypes = dynMenu()
@@ -40,22 +43,25 @@ def borrow(request):
     borrow = t_borrow.objects.get(idBorrow=id)
     return render(request, 'borrow.html', context={'menuTypes': menuTypes, 'borrow': borrow, 'borTotal': getTotalUserBorrows(request)})
 
+# Borrows view - displays every borrows
 @login_required
 def borrows(request):
     menuTypes = dynMenu()
     return render(request, 'borrows.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
+# Products view - displays every products
 @login_required
 def products(request):
     menuTypes = dynMenu()
     return render(request, 'products.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
+# Articles view - displays every articles
 @login_required
 def articles(request):
     menuTypes = dynMenu()
     return render(request, 'articles.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
-
+# AddProduct form view - Form to add a product
 @login_required
 def addProduct(request):
     if request.method == 'POST':
@@ -70,6 +76,7 @@ def addProduct(request):
         form = addProductForm()
     return render(request, 'addProduct.html', {'form': form, 'borTotal': getTotalUserBorrows(request)})
 
+# EditProduct form view - Form to edit a product
 @login_required
 def editProduct(request):
     id = request.GET.get('id')
@@ -86,6 +93,7 @@ def editProduct(request):
     
     return render(request, 'editProduct.html', {'form': form, 'borTotal': getTotalUserBorrows(request)})
 
+# DeleteProduct view - delete a product
 @login_required
 def deleteProduct(request):
     id = request.GET.get('id')
@@ -95,6 +103,7 @@ def deleteProduct(request):
     product.delete()
     return HttpResponseRedirect('/')
 
+# AddArticle form view - Form to add an article
 @login_required
 def addArticle(request):
     if request.method == 'POST':
@@ -109,6 +118,8 @@ def addArticle(request):
         form = articleForm()
     return render(request, 'addArticle.html', {'form': form, 'borTotal': getTotalUserBorrows(request)})
 
+
+# AddArticle form view - Form to edit an article
 @login_required
 def editArticle(request):
     id = request.GET.get('id')
@@ -133,6 +144,7 @@ def deleteArticle(request):
     article.delete()
     return HttpResponseRedirect('/')
 
+# AddBorrow form view - Form to add a borrow
 @login_required
 def addBorrow(request):
     menuTypes = dynMenu()
@@ -156,6 +168,7 @@ def addBorrow(request):
 
     return render(request, 'addBorrow.html', {'form': form, 'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
+# EditBorrow form view - Form to edit a borrow
 @login_required
 def editBorrow(request):
     menuTypes = dynMenu()
@@ -173,6 +186,7 @@ def editBorrow(request):
     
     return render(request, 'editBorrow.html', {'form': form, 'menuTypes': menuTypes, 'borrow': borrow, 'borTotal': getTotalUserBorrows(request)})
 
+# DeleteBorrow view - delete a borrow
 @login_required
 def deleteBorrow(request):
     id = request.GET.get('id')
@@ -181,9 +195,13 @@ def deleteBorrow(request):
     borrow.delete()
     return HttpResponseRedirect('/')
 
+### Functions ###
+
+# Get the list of types for the menu
 def dynMenu():
     return list(t_types.objects.all().values_list('typName', flat=True))
 
+# Get the number of borrows for the connected user
 def getTotalUserBorrows(request):
     if request.user.is_authenticated:
         # Get the connected user
@@ -194,34 +212,14 @@ def getTotalUserBorrows(request):
         return num_borrows
     else: return 0
 
-# Define the jsondata view function
+# JSON data response
+@login_required
 def jsondata(request):
     # Get the 'table' parameter from the GET request
     table = request.GET.get('table')
     
-    # If the table parameter is 't_borrow', retrieve data from the t_borrow table
-    if table == 't_borrow':
-        data = list(t_borrow.objects.select_related(
-            'borUser',
-            'fkArticle__fkProduct__fkType',
-            'fkArticle__fkProduct__fkCategory',
-            'fkArticle__fkCupboard__fkRoom'
-        ).annotate(
-            borDate_str=Cast('borDate', output_field=CharField()),
-            borReturnDate_str=Cast('borReturnDate', output_field=CharField())
-        ).values(
-            'fkArticle__fkProduct__fkType__typName',
-            'fkArticle__fkProduct__fkCategory__catName',
-            'fkArticle__fkProduct__proName',
-            'fkArticle__artName',
-            'borLocation',
-            'fkArticle__artNote',
-            'borDate_str',
-            'borReturnDate_str',
-            'borUser__username',
-        ))
     # If the table parameter is 't_article', retrieve data from the t_article table
-    elif table == 't_article':
+    if table == 't_article':
         data = list(t_article.objects.select_related(
             'fkProduct__fkType',
             'fkProduct__fkCategory',
@@ -241,7 +239,8 @@ def jsondata(request):
             't_borrow__borUser__username',
             'idArticle',
         ))
-    if table == 't_borrow':
+    # If the table parameter is 't_borrow', retrieve data from the t_borrow table
+    elif table == 't_borrow':
         data = list(t_borrow.objects.select_related(
             'borUser',
             'fkArticle__fkProduct__fkType',
@@ -262,26 +261,7 @@ def jsondata(request):
             'borReturnDate_str',
             'borUser__username',
         ))
-    elif table == 't_article':
-        data = list(t_article.objects.select_related(
-                'fkProduct__fkType',
-                'fkProduct__fkCategory',
-                'fkCupboard__fkRoom'
-            ).annotate(
-                borDate_str=Cast('t_borrow__borDate', output_field=CharField()),
-                borReturnDate_str=Cast('t_borrow__borReturnDate', output_field=CharField())
-            ).values(
-                'fkProduct__fkType__typName',
-                'fkProduct__fkCategory__catName',
-                'fkProduct__proName',
-                'artName',
-                't_borrow__borLocation',
-                'artNote',
-                'borDate_str',
-                'borReturnDate_str',
-                't_borrow__borUser__username',
-                'idArticle',
-            ))
+    # If the table parameter is 't_products', retrieve data from the t_products table
     elif table == 't_products':
         data = list(t_products.objects.select_related(
                 'fkType',
