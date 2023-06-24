@@ -50,13 +50,11 @@ def borrows(request):
     return render(request, 'borrows.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
 # Products view - displays every products
-@login_required
 def products(request):
     menuTypes = dynMenu()
     return render(request, 'products.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
 
 # Articles view - displays every articles
-@login_required
 def articles(request):
     menuTypes = dynMenu()
     return render(request, 'articles.html', context={'menuTypes': menuTypes, 'borTotal': getTotalUserBorrows(request)})
@@ -213,7 +211,7 @@ def getTotalUserBorrows(request):
     else: return 0
 
 # JSON data response
-@login_required
+
 def jsondata(request):
     # Get the 'table' parameter from the GET request
     table = request.GET.get('table')
